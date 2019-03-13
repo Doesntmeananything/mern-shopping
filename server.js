@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const helmet = require("helmet");
 const path = require("path");
 // DB config
-const db = require("./config/keys").mongoURI;
+// const db = require("./config/keys").mongoURI;
 
 const items = require("./routes/api/items");
 
@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Connect to DB
 try {
-  mongoose.connect(db, { useNewUrlParser: true });
+  mongoose.connect(process.env.mongoURI, { useNewUrlParser: true });
   console.log("MongoDB connected");
 } catch (error) {
   console.log(error);
