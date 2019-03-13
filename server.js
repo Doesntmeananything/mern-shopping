@@ -21,10 +21,6 @@ try {
   console.log(error);
 }
 
-app.get("/", (req, res) => {
-  res.send("Hello");
-});
-
 // Use routes
 app.use("/api/items", items);
 
