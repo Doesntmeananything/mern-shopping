@@ -1,11 +1,12 @@
+const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const helmet = require("helmet");
-const path = require("path");
-// DB config
-// const db = require("./config/keys").mongoURI;
+const config = require("config");
 
 const items = require("./routes/api/items");
+const users = require("./routes/api/users");
+const auth = require("./routes/api/auth");
 
 const app = express();
 
@@ -13,9 +14,15 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// DB Config
+const db = config.get("mongoURI");
+
 // Connect to DB
 try {
-  mongoose.connect(process.env.mongoURI, { useNewUrlParser: true });
+  mongoose.connect(db || process.env.mongoURI, {
+    useNewUrlParser: true,
+    useCreateIndex: true
+  });
   console.log("MongoDB connected");
 } catch (error) {
   console.log(error);
@@ -23,6 +30,8 @@ try {
 
 // Use routes
 app.use("/api/items", items);
+app.use("/api/users", users);
+app.use("/api/auth", auth);
 
 // Server static assets if in production
 if (process.env.NODE_ENV === "production") {
